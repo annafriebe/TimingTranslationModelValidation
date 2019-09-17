@@ -14,7 +14,7 @@ def getSwitchAndWakeupDataForCPU(filePath, CPU, microSeconds = False):
     with open(filePath) as f:
         lines = f.readlines()
         nLines = len(lines)
-        for i in range(25000, nLines - 400):
+        for i in range(25000, nLines-1):
             line = lines[i].split()
             event = line[3]
             cpu = line[1]

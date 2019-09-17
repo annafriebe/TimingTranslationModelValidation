@@ -26,9 +26,10 @@ def getProcessStates(previousProcessList):
             processCount.append(0)
         states[i] = processes.index(process)
         processCount[processes.index(process)] += 1
+    print('processes')
     print(processes)
+    print('number of samples')
     print(processCount)
-#    print(states)
     return len(processes), states
 
 def getTwoProcessStates(previousProcessList):
@@ -39,7 +40,6 @@ def getTwoProcessStates(previousProcessList):
             states[i] = 0
         else:
             states[i] = 1
-#    print(states)
     return states
 
 
@@ -70,14 +70,14 @@ for item in schedulingTimeDict:
     if item == 'all':
         allSchedulingTimes = schedulingTimeDict[item]
 
+print("wakeup in latency")
 nWakeupInLatency, WILprocesses = getProcessStates(wakeupInLatencyProcessList)
+print("wakeup in execution")
 nWakeupInExecution, WIEprocesses = getProcessStates(wakeupInExecutionProcessList)
-print(nWakeupInLatency, nWakeupInExecution)
 
 schedulingReleaseDiff = allSchedulingTimes - allReleaseTimes
     
         
-nProcesses, processes = getProcessStates(previousProcessList)
 twoProcesses = getTwoProcessStates(previousProcessList)
 
 timesPerTwoProc, schedulingReleaseDiffPerTwoProc, executionTimesPerTwoProc = \
@@ -92,64 +92,13 @@ calcPFABootstrapMeanDev(executionTimesPerTwoProc[1], \
                         executionTimesPerTwoProc[0])
 
 
-WILperTwoProc, WIEperTwoProc = splitLabelsPerCluster(WILprocesses, WIEprocesses, twoProcesses, 2)
-        
-    
-responseTimes = schedulingReleaseDiff +  executionTimeDict['all']
-
-WilWieLabels, nWilLieLabels, labelDict = mergeLabels(WILprocesses, WIEprocesses, nWakeupInLatency, nWakeupInExecution)
-
-timesPerWakeupCluster, schedulingReleaseDiffPerWakeupCluster, executionTimesPerWakeupCluster = \
-splitTimesPerCluster(schedulingReleaseDiff, executionTimeDict['all'], WilWieLabels, nWilLieLabels)
-
-noWakeupLabel = labelDict[0]
-WIELabel = labelDict[1]
-
-drawTimesPerProcess(schedulingReleaseDiff, executionTimeDict['all'], WilWieLabels,  "latency (ns)", "execution time (ns)", "Wakeup in execution")
-
-print("bootstrap wakeup in execution (execution), all")
-calcPFABootstrapMeanDev(executionTimesPerWakeupCluster[WIELabel], \
-                        executionTimesPerWakeupCluster[noWakeupLabel])
-
-
-WilWieLabels, nWilLieLabels, labelDict = mergeLabels(WILperTwoProc[0], WIEperTwoProc[0], nWakeupInLatency, nWakeupInExecution)
-
-timesPerWakeupCluster, schedulingReleaseDiffPerWakeupCluster, executionTimesPerWakeupCluster = \
-splitTimesPerCluster(schedulingReleaseDiffPerTwoProc[0], executionTimesPerTwoProc[0], WilWieLabels, nWilLieLabels)
-
-print(len(schedulingReleaseDiffPerWakeupCluster[labelDict[0]]))
-print(len(schedulingReleaseDiffPerWakeupCluster[labelDict[1]]))
-noWakeupLabel = labelDict[0]
-WIELabel = labelDict[1]
-print(nWilLieLabels)
-
-print("bootstrap wakeup in exectution, no intermediate")
-calcPFABootstrapMeanDev(executionTimesPerWakeupCluster[WIELabel], \
-                        executionTimesPerWakeupCluster[noWakeupLabel])
-
-
-drawTimeHistInRange(schedulingReleaseDiff, "all latencies (ns)", [4000, 9000])
 drawTimeHistInRange(schedulingReleaseDiffPerTwoProc[0], "latencies (ns), no intermediate processes", [4000, 9000])
 drawTimeHistInRange(schedulingReleaseDiffPerTwoProc[1], "latencies (ns), intermediate processes", [4000, 9000])
-drawTimeHistInRange(executionTimeDict['all'], "all execution times (ns)", [8000, 22000])
+
 drawTimeHistInRange(executionTimesPerTwoProc[0], "execution times (ns), no intermediate processes", [8000, 22000])
 drawTimeHistInRange(executionTimesPerTwoProc[1], "execution times (ns), intermediate processes", [8000, 22000])
 
-
-
-drawTimesPerProcess(schedulingReleaseDiffPerTwoProc[0], executionTimesPerTwoProc[0], WilWieLabels,  "latency", "execution time")
-
-wakeupStrings = [" no wakeup", " wakeup in execution"]
-for i in range(2):
-    title = "execution times (ns) for" + wakeupStrings[i]
-    drawTimeHistInRange(executionTimesPerWakeupCluster[labelDict[i]], title, [8000, 22000])
-
-drawTimesPerProcess(schedulingReleaseDiff, executionTimeDict['all'], processes, "latencies (ns)", "execution times (ns)", "Intermediate processes")
-
-
-drawSeqTimesAutoCorr(allReleaseTimes, "release times")
-drawSeqTimesAutoCorr(schedulingReleaseDiff, "latencies")
-drawSeqTimesAutoCorr(executionTimeDict['all'], "execution times", [2, 4])
+drawTimesPerTwoProcess(schedulingReleaseDiff, executionTimeDict['all'], processes, "latencies (ns)", "execution times (ns)", "Intermediate processes", 1)
 
 
 
