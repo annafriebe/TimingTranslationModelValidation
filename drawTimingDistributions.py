@@ -22,14 +22,13 @@ def drawTimesPerTwoProcess(releaseTimes, executionTimes, processes, xlabel = "",
         rt = releaseTimes[i]
         releaseTimesPerProcess[processes[i]].append(rt)
         executionTimesPerProcess[processes[i]].append(executionTimes[i])
-    cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
     plt.figure()
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.scatter(releaseTimesPerProcess[naProcess], executionTimesPerProcess[naProcess], c=cycle[0], marker='+')
+    plt.scatter(releaseTimesPerProcess[naProcess], executionTimesPerProcess[naProcess], c='blue', marker='+')
     for i in range(len(processes)):
         if i != naProcess:
-            plt.scatter(releaseTimesPerProcess[i], executionTimesPerProcess[i], c=cycle[1], marker='x')
+            plt.scatter(releaseTimesPerProcess[i], executionTimesPerProcess[i], c='black', marker='x')
 
 

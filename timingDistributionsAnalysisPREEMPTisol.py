@@ -78,6 +78,7 @@ nWakeupInExecution, WIEprocesses = getProcessStates(wakeupInExecutionProcessList
 schedulingReleaseDiff = allSchedulingTimes - allReleaseTimes
     
         
+nProcesses, processes = getProcessStates(previousProcessList)
 twoProcesses = getTwoProcessStates(previousProcessList)
 
 timesPerTwoProc, schedulingReleaseDiffPerTwoProc, executionTimesPerTwoProc = \
