@@ -26,7 +26,7 @@ def drawTimesPerTwoProcess(releaseTimes, executionTimes, processes, xlabel = "",
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.scatter(releaseTimesPerProcess[naProcess], executionTimesPerProcess[naProcess], c='blue', marker='+')
+    plt.scatter(releaseTimesPerProcess[naProcess], executionTimesPerProcess[naProcess], c='tab:blue', marker='+')
     for i in range(len(processes)):
         if i != naProcess:
             plt.scatter(releaseTimesPerProcess[i], executionTimesPerProcess[i], c='black', marker='x')
